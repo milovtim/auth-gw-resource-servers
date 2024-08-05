@@ -11,17 +11,18 @@ import org.springframework.security.web.SecurityFilterChain;
 
 import static org.springframework.security.config.Customizer.withDefaults;
 
-@EnableWebSecurity
+@EnableWebSecurity(debug = true)
 public class DefaultSecurityConfig {
 
     @Bean
     SecurityFilterChain defaultSecurityFilterChain(HttpSecurity http) throws Exception {
         http
+                .authorizeRequests(urlRegistry ->
+                        urlRegistry.mvcMatchers("/error").anonymous())
                 .authorizeRequests(authorizeRequests ->
                         authorizeRequests
                                 .anyRequest()
-                                .authenticated()
-                )
+                                .authenticated())
                 .formLogin(withDefaults());
         return http.build();
     }
